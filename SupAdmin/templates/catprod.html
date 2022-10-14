@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mycheck %}
+
+
+{% block title %}
+Categorys And Products List
+{% endblock %}
+
+{% comment %} body {% endcomment %}
+{% block content %}
+
+<div class="container">
+    <div class="row mt-3">
+        
+
+        <!-- start right side -->
+        <div class="col">
+            <h4 class="text-center">Category and Products List</h4>
+            
+                        
+            {% comment %} Start superuseradmin view {% endcomment %}
+            {% if request.user.is_superuser %}
+
+            <!-- my 1st made Product card -->
+            <div class="row mt-1">
+                <div class="col-lg-12 col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                    
+                    <div class="row m-2">
+                        <div class="col-lg-8 col-md-12">                  
+                        <h4 class="card-title">Product List</h4>
+                        <p class="card-category">You can Add new Product.</p>
+                        </div>
+                        <div class="col-lg-4 col-md-12">
+                        <a href="{% url 'addproduct' %}" class="btn btn-success ">Add Product</a>
+                        </div>
+                    </div>
+                    
+                    </div>
+                    <div class="card-body table-responsive">
+                    <table class="table table-hover">
+                        <thead class="text-warning">
+                        <th class="text-light">ID</th>
+                        <th class="text-warning text-center">Name</th>
+                        <th class="text-warning text-center">Price</th>
+                        <th class="text-warning text-center">Unit</th>
+                        <th class="text-warning text-center">Category</th>
+                        <th class="text-warning text-center">Desc</th>
+                        <th class="text-warning text-center">Image</th>
+                        <th class="text-warning text-center">Action</th>
+                        </thead>
+                        <tbody>
+                        {% if products %}
+                        {% for product in products %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>৳ {{ product.price }}</td>
+                            <td>{{ product.unit }}</td>
+                            <td>{{ product.category }}</td>
+                            <td>{{ product.description }}</td>
+                            <td>
+                            <img src="{{ product.image.url }}" width="100px" height="100px" alt="">
+                            </td>
+                            <td>
+                                <a href="{% url 'updateProduct' product.id %}"> <i class="material-icons">Update</i></a>
+                                <a href="{% url 'deleteProduct' product.id %}"> <i class="material-icons">Delete</i></a>
+                            </td> 
+                            </tr>
+                        </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                    <!-- paginator -->
+                    <div class="container">
+                        {% if products.has_other_pages %}
+                        <ul class="pagination justify-content-center">
+                        {% if products.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link disabled" href="javascript:void(0);">Previous</a></li>
+                        {% endif %}
+                        {% for i in products.paginator.page_range %}
+                        {% if products.number == i %}
+                        <li class="page-item"><a class="page-link active bg-info" href="javascript:void(0);">{{ i }}</a></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if products.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}">Next</a></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>
+                        {% endif %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                    <!-- end paginator -->
+                    </div>
+                </div>          
+                
+                </div>
+            </div>
+            <!-- my 1st made product card end -->
+
+            <!-- my 2nd made category card -->
+            <div class="row mt-2">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header card-header-success">
+
+                        <div class="row m-2">
+                            <div class="col-lg-8 col-md-12">                  
+                            <h4 class="card-title">Category List</h4>
+                            <p class="card-category">You can Add new Category.</p>
+                            </div>
+                            <div class="col-lg-4 col-md-12">
+                            <a href="{% url 'addcategory' %}" class="btn btn-info">Add Category</a>
+                            </div>
+                        </div>
+
+                        </div>
+                        <div class="card-body table-responsive">
+                        <table class="table table-hover">
+                            <thead class="text-warning">
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Action</th>
+                            </thead>
+                            <tbody>
+                            {% if categorys %}
+                                {% for category in categorys %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ category.name }}</td>
+                                 
+                                <td>
+                                    <a href="{% url 'updateCategory' category.id %}"> <i class="material-icons">Update</i></a>
+                                    <a href="{% url 'deleteCategory' category.id %}"> <i class="material-icons">Delete</i></a>
+                                </td>
+                            </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                        </div>
+                        <div class="card-footer">
+                        
+                        <!-- paginatior -->
+                        <div class="container">
+                            {% if categorys.has_other_pages %}
+                            <ul class="pagination justify-content-center">
+                            {% if categorys.has_previous %}
+                                <li class="page-item"><a class="page-link" href="?categorypage={{ categorys.previous_page_number }}">Previous</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link disabled" href="javascript:void(0);">Previous</a></li>
+                            {% endif %}
+                            {% for i in categorys.paginator.page_range %}
+                            {% if categorys.number == i %}
+                            <li class="page-item"><a class="page-link active bg-info" href="javascript:void(0);">{{ i }}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href="?categorypage={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if categorys.has_next %}
+                            <li class="page-item"><a class="page-link" href="?categorypage={{ categorys.next_page_number }}">Next</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>
+                            {% endif %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                    <!-- end paginator -->
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <!-- my 2nd made product and customer card end -->
+
+            {% endif %}
+
+            {% comment %} end superuseradmin view {% endcomment %}
+
+
+
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock content %}

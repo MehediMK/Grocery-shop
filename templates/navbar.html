@@ -1,0 +1,86 @@
+{% load mycheck %}
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <a class="navbar-brand" href="{% url 'home' %}">Proyojon Shop</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mx-auto">
+      {% if request.path|checkpath == '' %}
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'home' %}">Home</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'home' %}">Home</a>
+      </li>
+      {% endif %}
+    </ul>
+    
+    <form action="{% url 'ProductSearch' %}" method="GET" class="form-inline mx-auto my-2 my-lg-0">
+      <input type="text" value="{{mysearch}}" name="search" class="form-control form-control-md form-control-sm mr-sm-2" placeholder="Search" aria-label="Search">
+      <input class="btn btn-sm btn-md btn-outline-success my-2 my-sm-0" type="submit" value = "Search"/>
+    </form>
+
+    <ul class="navbar-nav mr-0">
+      {% if request.path|checkpath == 'cart' %}
+      <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'cart' %}">Cart  
+            {% if request.session.cart %}
+            <small class="badge bg-info"> {{request.session.cart.keys|length}} </small>
+            {% else %}
+            <small class="badge bg-danger"> 0 </small>
+            {% endif %}
+          </a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{% url 'cart' %}">Cart  
+            {% if request.session.cart %}
+            <small class="badge bg-info"> {{request.session.cart.keys|length}} </small>
+            {% else %}
+            <small class="badge bg-danger"> 0 </small>
+            {% endif %}
+          </a>
+      </li>
+      {% endif %}      
+      {% if request.user.is_authenticated %}
+          {% if request.path|checkpath == 'userprofile' %}
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'userprofile' %}">{{request.user.first_name|upper}} {{request.user.last_name|upper}}</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'userprofile' %}">{{request.user.first_name|upper}} {{request.user.last_name|upper}}</a>
+            </li>
+          {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'signout' %}">Logout</a>
+        </li>
+      {% else %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Login/Signup
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% if request.path|checkpath == 'signin' %}
+            <a class="dropdown-item active" href="{% url 'signin' %}">Login</a>
+            {% else %}
+            <a class="dropdown-item" href="{% url 'signin' %}">Login</a>
+            {% endif %}
+            <div class="dropdown-divider"></div>
+            {% if request.path|checkpath == 'signup' %}
+            <a class="dropdown-item active" href="{% url 'signup' %}">Sign Up</a>
+            {% else %}
+            <a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a>
+            {% endif %}
+          </div>
+        </li>
+      {% endif %}
+      
+    </ul>
+    </ul>
+  </div>
+</nav>

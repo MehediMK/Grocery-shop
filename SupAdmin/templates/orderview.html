@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mycheck %}
+
+
+{% block title %}
+Categorys And Products List
+{% endblock %}
+
+{% comment %} body {% endcomment %}
+{% block content %}
+
+<div class="container">
+    <div class="row mt-3">
+        
+
+        <!-- start right side -->
+        <div class="col">
+            <h4 class="text-center">Order List </h4>
+            
+                        
+            {% comment %} Start superuseradmin view {% endcomment %}
+            {% if request.user.is_superuser %}
+
+                <!-- my made order card -->
+                <div class="row">
+                    <div class="col-lg-12 col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-warning">
+                        <h4 class="card-title">Order List</h4>
+                        <p class="card-category">Only Admin can see Order List.</p>
+                        </div>
+                        <div class="card-body table-responsive">
+                        <table class="table table-hover">
+                            <thead class="text-warning">
+                            <th class="text-warning">ID</th>
+                            <th class="text-warning">Product Name</th>
+                            <th class="text-warning">Customer Email</th>
+                            <th class="text-warning">Order Quantity</th>
+                            <th class="text-warning">Price</th>
+                            <th class="text-warning">bKash TrxID</th>
+                            <th class="text-warning">Address</th>
+                            <th class="text-warning">Phone</th>
+                            <th class="text-warning">Date</th>
+                            <th class="text-warning">Status</th>
+                            <th class="text-warning">Action</th>
+                            </thead>
+                            <tbody>
+                            {% if orders %}
+                                {% for order in orders %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ order.product }}</td>
+                                <td>{{ order.customer }}</td>
+                                <td>{{ order.quantity }}</td>
+                                <td>{{ order.price }}</td>
+                                <td>{{ order.bkashTrxID }}</td>
+                                <td>{{ order.address }}</td>
+                                <td>{{ order.phone }}</td>
+                                <td>{{ order.date }}</td>
+                                {% if order.status %}
+                                <td ><kbd class="bg-success text-light font-weight-bold ">Complete</kbd></td>
+                                {% else %}
+                                <td ><kbd class="bg-danger text-light font-weight-bold ">Pangding</kbd></td>
+                                {% endif %}
+                                <td>
+                                    <a href="{% url 'updateOrderStatus' order.id %}"> <i class="material-icons">edit</i></a>
+                                </td>
+                            </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                        <!-- paginatior -->
+                        <div class="container">
+                            {% if orders.has_other_pages %}
+                            <ul class="pagination justify-content-center">
+                            {% if orders.has_previous %}
+                                <li class="page-item"><a class="page-link" href="?orderpage={{ orders.previous_page_number }}">Previous</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link disabled" href="javascript:void(0);">Previous</a></li>
+                            {% endif %}
+                            {% for i in orders.paginator.page_range %}
+                            {% if orders.number == i %}
+                            <li class="page-item"><a class="page-link active bg-info" href="javascript:void(0);">{{ i }}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href="?orderpage={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if orders.has_next %}
+                            <li class="page-item"><a class="page-link" href="?orderpage={{ orders.next_page_number }}">Next</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>
+                            {% endif %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                        <!-- end paginator -->
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!-- my made order card end -->
+
+            {% endif %}
+
+            {% comment %} end superuseradmin view {% endcomment %}
+
+
+
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock content %}

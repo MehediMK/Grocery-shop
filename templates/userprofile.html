@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mycheck %}
+
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% comment %} body {% endcomment %}
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row mt-3">
+        <!-- start user profile area left side -->
+        <div class="col-md-3 mx-auto ">
+          <div class="border p-2 w-100">
+            <h1 class='text-center'>User Profile</h1><hr>
+            {% if profile.profile_pic %}
+            <img class='d-block mx-auto img-thumbnail' src="{{ profile.profile_pic.url }}" alt="">
+            {% else %}
+            <img class='d-block mx-auto img-thumbnail' src="{% static 'image/demoprofile.png' %}" alt="">
+            {% endif %}
+            <p>Name: {{ user.first_name}} {{ user.last_name }}</p>
+            <p>Email: {{ user.email }}</p>
+            <p>Gender: {{profile.get_gender_display}}</p>
+            <p>Address: {{profile.address}}</p>
+            <p>Phone No: {{profile.phone}}</p>
+            <div class="row">
+                <div class="col">
+                    <a href="{% url 'editUserInfo' %}" class="btn btn-success w-100">Edit</a>
+                </div>
+                <div class="col">
+                    <a href="{% url 'home' %}" class="btn btn-warning w-100">Change password</a>
+                </div>
+            </div>
+            </div>
+        </div>
+        <!-- end user profile or left side -->
+
+        <!-- start right side -->
+        <div class="col-md-8">
+            <h4 class="text-center">User Details</h4>
+            
+            {% if request.user.is_superuser %}
+            <div class="row mx-auto">
+                <div class="col">
+                    <a href="{% url 'addproduct' %}" class="btn btn-info m-1">Add Product</a>
+                </div>
+                <div class="col">
+                    <a href="{% url 'addcategory' %}" class="btn btn-warning m-1">Add Category</a>
+                </div>
+                <div class="col">
+                    <a href="{% url 'catAndprod' %}" class="btn btn-warning m-1">Categorys/Products</a>
+                </div>
+                <div class="col">
+                    <a href="{% url 'orderview' %}" class="btn btn-warning m-1">Order View</a>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% comment %} Start superuseradmin view {% endcomment %}
+            {% if request.user.is_superuser %}
+
+            <!-- start revenew area -->
+            <div class="row">
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                      <div class="card-header card-header-success card-header-icon">
+                        <div class="card-icon">
+                          <i class="material-icons">store</i>
+                        </div>
+                        <p class="card-category">Revenue</p>
+                        <h3 class="card-title">৳ {{ revenewsum }}</h3>
+                      </div>
+                      <div class="card-footer">
+                        <div class="stats">
+                          <i class="material-icons">date_range</i> ALL Time
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end revenew area -->
+
+            
+            {% endif %}
+
+            {% comment %} end superuseradmin view {% endcomment %}
+
+            <!-- user order product view -->
+            <div class="row">
+                <div class="border rounded p-4 m-1">
+                    <h1 class='text-center'>Your Orders</h1>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Sno.</th>
+                          <th>Image</th>
+                          <th>Name</th>
+                          <th>Category</th>
+                          <th>Date</th>
+                          <th>Price</th>
+                          <th>Quantity</th>
+                          <th>Total Price</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        
+                    {% for order in orders %}
+                        <tr>          
+                          <td>{{ forloop.counter }}</td>
+                          <td><img src="{{ order.product.image.url }}" width="100px" height="100px" alt=""></td>
+                          <td>{{ order.product.name}}</td>
+                          <td>{{ order.product.category}}</td>
+                          <td>{{ order.date}}</td>
+                          <td>{{ order.price|currency }}</td>
+                          <td>{{ order.quantity}}</td>
+                          <td>{{ order.quantity|multiply:order.price|currency }}</td>
+                          {% if order.status %}
+                          <td><small class="badge badge-success p-3">Completed</small></td>
+                          {% else %}
+                          <td><small class="badge badge-danger p-3">Pangding</small></td>
+                          {% endif %}
+                        </tr>
+                    {% endfor %}
+                        
+                      </tbody>
+                      
+                    </table>
+                
+                   
+                  </div>
+            </div>
+            <!-- order product view end -->
+
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock content %}
