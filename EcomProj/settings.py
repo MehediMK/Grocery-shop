@@ -4,7 +4,6 @@ from config import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = SECRET_KEY
 
@@ -12,7 +11,6 @@ SECRET_KEY = SECRET_KEY
 DEBUG = DEBUG
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -67,8 +65,10 @@ WSGI_APPLICATION = 'EcomProj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = DATABASES
+#remove comment for apply postgres with args
+# DATABASES = postgres_database(name,username,password,host,port)
 
+DATABASES = sqlite_database(BASE_DIR)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
