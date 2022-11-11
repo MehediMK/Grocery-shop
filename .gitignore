@@ -5,3 +5,5 @@ migrations
 media
 db.sqlite3
 config.py
+env
+.env
