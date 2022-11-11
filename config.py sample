@@ -1,32 +1,26 @@
-from pathlib import Path
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Enter you project secret key here
+SECRET_KEY = 'django-insecure-rign0ew55-74rmlbim_la=y#w5om84t!nz+*n-g*^ruhg6l^ck'
 
 DEBUG = True
 
 # change here as your project config...
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Roomrent',
-        'USER': 'postgres',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '7732',
+def postgres_database(name,username,password,host,port):
+    return {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': name,
+            'USER': username,
+            'PASSWORD': password,
+            'HOST': host,
+            'PORT': port,
+        }
     }
-}
-"""
+    
 # sqlite database settings
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+def sqlite_database(path):
+    return {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': path / 'db.sqlite3',
+        }
     }
-}
-
-
-
-# Enter you project secret key here
-SECRET_KEY = 'django-insecure-rign0ew55-74rmlbim_la=y#w5om84t!nz+*n-g*^ruhg6l^ck'
